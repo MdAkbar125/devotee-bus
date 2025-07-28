@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Devotee Bus Ticketing System - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .nav-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .nav-button {
+      font-size: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .nav-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>Devotee Bus Ticketing System</h1>
+    <div class="nav-container" role="navigation" aria-label="Main Navigation">
+      <a href="booking_tirupati_to_tirumala.html" class="nav-button" aria-label="Book Tickets Tirupati to Tirumala">Book Tickets: Tirupati → Tirumala</a>
+      <a href="booking_tirumala_to_tirupati.html" class="nav-button" aria-label="Book Tickets Tirumala to Tirupati">Book Tickets: Tirumala → Tirupati</a>
+      <a href="booking_two_way.html" class="nav-button" aria-label="Book Tickets Two-Way">Book Tickets: Two-Way (Tirupati ↔ Tirumala)</a>
+      <a href="my_booked_tickets.html" class="nav-button" aria-label="View My Booked Tickets">My Booked Tickets</a>
+    </div>
+  </div>
+  <script src="chatbot.js"></script>
+</body>
+</html>

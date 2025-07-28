@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="common.js"></script>
+</head>
+<body>
+  <div class="container" role="main">
+    <h1>Admin Dashboard</h1>
+    <div id="loginSection">
+      <label for="adminPassword">Enter Admin Password:</label>
+      <input type="password" id="adminPassword" aria-label="Admin Password" />
+      <button id="loginBtn">Login</button>
+      <p id="loginMessage" class="error" aria-live="polite"></p>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+      <h2>Ticket Statistics</h2>
+      <p>Total Tickets Booked: <span id="totalTickets">0</span></p>
+      <p>Tickets by Route and Type:</p>
+      <ul id="ticketsByRouteType"></ul>
+      <p>Number of Scanned/Used Tickets: <span id="scannedTickets">0</span></p>
+      <button id="resetBtn">reset all tickets</button>
+      <p id="resetMessage" class="message" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = "templeadmin123"; // Basic password protection
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginSection = document.getElementById('loginSection');
+      const dashboard = document.getElementById('dashboard');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginMessage = document.getElementById('loginMessage');
+      const totalTicketsEl = document.getElementById('totalTickets');
+      const ticketsByRouteTypeEl = document.getElementById('ticketsByRouteType');
+      const scannedTicketsEl = document.getElementById('scannedTickets');
+      const resetBtn = document.getElementById('resetBtn');
+      const resetMessage = document.getElementById('resetMessage');
+
+      loginBtn.addEventListener('click', () => {
+        const password = document.getElementById('adminPassword').value;
+        if (password === ADMIN_PASSWORD) {
+          loginSection.style.display = 'none';
+          dashboard.style.display = 'block';
+          loadStats();
+        } else {
+          loginMessage.textContent = "Incorrect password.";
+        }
+      });
+
+      function loadStats() {
+        try {
+          const tickets = getAllTickets();
+
+          totalTicketsEl.textContent = tickets.length;
+
+          // Count by route and type
+          const counts = {};
+      tickets.forEach(t => {
+        const key = `${t.route} - ${t.type}`;
+        counts[key] = (counts[key] || 0) + 1;
+      });
+
+          // Remove specific entries from counts
+          delete counts["Tirupati ↔ Tirumala - one-way"];
+          delete counts["Tirupati ↔ Tirumala - two-way"];
+
+          ticketsByRouteTypeEl.innerHTML = '';
+          for (const [key, count] of Object.entries(counts)) {
+            const li = document.createElement('li');
+            li.textContent = `${key}: ${count}`;
+            ticketsByRouteTypeEl.appendChild(li);
+          }
+
+          // Count scanned tickets
+          const scannedCount = tickets.filter(t => t.scansUsed > 0).length;
+          scannedTicketsEl.textContent = scannedCount;
+        } catch (error) {
+          resetMessage.textContent = "Error loading stats: " + error.message;
+        }
+      }
+
+      resetBtn.addEventListener('click', () => {
+        resetMessage.textContent = "Resetting all tickets...";
+        try {
+          resetAllTickets();
+          resetMessage.textContent = "All tickets reset.";
+          loadStats();
+        } catch (error) {
+          resetMessage.textContent = "Error resetting tickets: " + error.message;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
